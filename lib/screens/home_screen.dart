@@ -113,8 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             borderRadius: BorderRadius.circular(8),
                                           ),
                                           child: Container(
-                                              width: 210,
-                                              height: 180,
+                                              width: 250,
+                                              height: 190,
                                               child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children :[
@@ -129,11 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ),
                                                     ),
                                                     Container(
-                                                      padding: const EdgeInsets.only(top: 10, left: 10, right: 10,),
+                                                      padding: const EdgeInsets.only(top: 10, left: 15, right: 15,),
                                                       child: Text(_upcoming_events[index]["name"], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
                                                     ),
                                                     Container(
-                                                        padding: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
+                                                        padding: const EdgeInsets.only(top: 0, left: 15, right: 15, bottom: 10),
                                                         child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: const TextStyle(fontSize: 13),)
                                                     )
                                                   ]

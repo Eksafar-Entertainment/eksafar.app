@@ -56,31 +56,27 @@ class _MainScreenState extends State<MainScreen> {
                 state.accessToken!=null? ProfileScreen(): GuestScreen(),
               ],
           ),
-            bottomNavigationBar: BottomNavigationBar(
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              type: BottomNavigationBarType.fixed,
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
+            bottomNavigationBar: NavigationBar(
+              destinations: const <Widget>[
+                NavigationDestination(
                   icon: Icon(Icons.home),
-                  label: '',
+                  label: 'Home',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Icons.favorite),
-                  label: '',
+                  label: 'Favorite',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Icons.discount),
-                  label: '',
+                  label: 'Tickets',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Icons.account_circle),
-                  label: '',
+                  label: 'Profile',
                 ),
               ],
-              currentIndex: pageIndex,
-              selectedItemColor: Colors.amber[800],
-              onTap: _onItemTapped,
+              selectedIndex: pageIndex,
+              onDestinationSelected: _onItemTapped,
             ),
           );
         }

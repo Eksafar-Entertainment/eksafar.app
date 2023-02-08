@@ -33,23 +33,24 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, state) {
           return Scaffold(
               appBar: AppBar(
-                title: const Text("Eksafar"),
-                actions: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.notifications))
-                ],
-                bottom:  PreferredSize(
-                  preferredSize: Size.fromHeight(50.0), // here the desired height
-                  child: Container(
-                    child: TextField(
-                      onChanged: (String value){},
-                      decoration: const InputDecoration(
-                          hintText: 'Search for events',
-                          prefixIcon: Icon(Icons.search),
-
-                      ),
-                    ),
+                title: const Text('AppBar Demo'),
+                actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.add_alert),
+                    tooltip: 'Show Snackbar',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('This is a snackbar')));
+                    },
                   ),
-                ),
+                  IconButton(
+                    icon: const Icon(Icons.navigate_next),
+                    tooltip: 'Go to the next page',
+                    onPressed: () {
+
+                    },
+                  ),
+                ],
               ),
               body: RefreshIndicator(
                   onRefresh: fetchItems,

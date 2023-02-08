@@ -32,26 +32,49 @@ class _HomeScreenState extends State<HomeScreen> {
         converter: (store) => store.state,
         builder: (context, state) {
           return Scaffold(
-              appBar: AppBar(title: const Text("cool"),),
+              appBar: AppBar(
+                title: const Text("Eksafar"),
+                actions: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.notifications))
+                ],
+                bottom:  PreferredSize(
+                  preferredSize: Size.fromHeight(50.0), // here the desired height
+                  child: Center(
+                    child: TextField(
+                      onChanged: (String value){},
+                      decoration: const InputDecoration(
+                          hintText: 'Search for events',
+                          prefixIcon: Icon(Icons.search),
+
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               body: RefreshIndicator(
                   onRefresh: fetchItems,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Container(
-                            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                             child: Row(
-                                children: const [
-                                  Text("Upcoming Events", )
+                                children:  [
+                                  Text("Upcoming Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                                  Spacer(flex: 1,),
+                                  InkWell(
+                                    onTap: (){},
+                                    child: Icon(Icons.arrow_forward,),
+                                  )
                                 ]
                             )
                         ),
                         Container(
-                            height: 180,
-                            margin: const EdgeInsets.symmetric(vertical: 15),
+                            height: 200,
                             child: ListView(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                               children: List.generate(_upcoming_events.length, (index) =>
                                   Card(
                                     margin: EdgeInsets.symmetric(horizontal: 10),
@@ -77,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Container(
                                                     padding: EdgeInsets.only(top: 0, left: 10, right: 10,),
-                                                    child: Text(_upcoming_events[index]["venue_name"]+" &bull "+_upcoming_events[index]["start_date"], style: TextStyle(fontSize: 13),)
+                                                    child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: TextStyle(fontSize: 13),)
                                                 )
                                               ]
                                           )
@@ -88,10 +111,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                         ),
                         Container(
-                            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                             child: Row(
                                 children: const [
-                                  Text("Past Events")
+                                  Text("Past Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                                  Spacer(flex: 1,),
+                                  InkWell(
+                                    child: Icon(Icons.arrow_forward),
+                                  )
                                 ]
                             )
                         ),

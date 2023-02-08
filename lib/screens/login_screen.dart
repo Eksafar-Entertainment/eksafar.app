@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pop(context);
       } catch(e) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(e.toString()??"")),
+           SnackBar(content: Text(e.toString())),
         );
       }
     }

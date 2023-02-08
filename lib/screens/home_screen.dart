@@ -33,24 +33,52 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, state) {
           return Scaffold(
               appBar: AppBar(
-                title: const Text('AppBar Demo'),
+                title: Container(
+                  child:Row(children: [
+                    Image.asset("assets/logo.png", height: 30, width: 40, fit: BoxFit.contain,),
+                  ],) ,
+                ),
                 actions: <Widget>[
                   IconButton(
-                    icon: const Icon(Icons.add_alert),
-                    tooltip: 'Show Snackbar',
+                    icon: const Icon(Icons.notifications),
+                    tooltip: '',
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('This is a snackbar')));
                     },
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.navigate_next),
-                    tooltip: 'Go to the next page',
-                    onPressed: () {
-
-                    },
-                  ),
                 ],
+                // bottom: PreferredSize(
+                //   preferredSize: const Size.fromHeight(70),
+                //   child: Container(
+                //     padding: const EdgeInsets.only(
+                //         left: 15,
+                //         right: 15,
+                //         bottom: 15
+                //     ),
+                //     child: const TextField(
+                //       decoration: InputDecoration(
+                //           filled: true,
+                //           contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                //           border: OutlineInputBorder(
+                //               borderSide: BorderSide(
+                //                   width: 0
+                //               )
+                //           ),
+                //           focusedBorder: OutlineInputBorder(
+                //               borderSide: BorderSide(
+                //                   width: 0
+                //               )
+                //           ),
+                //           enabledBorder: OutlineInputBorder(
+                //               borderSide: BorderSide(
+                //                   width: 0
+                //               )
+                //           )
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ),
               body: RefreshIndicator(
                   onRefresh: fetchItems,
@@ -61,49 +89,55 @@ class _HomeScreenState extends State<HomeScreen> {
                             margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                             child: Row(
                                 children:  [
-                                  Text("Upcoming Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-                                  Spacer(flex: 1,),
+                                  const Text("Upcoming Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                                  const Spacer(flex: 1,),
                                   InkWell(
                                     onTap: (){},
-                                    child: Icon(Icons.arrow_forward,),
+                                    child: const Icon(Icons.arrow_forward,),
                                   )
                                 ]
                             )
                         ),
                         Container(
-                            height: 200,
+                            height: 210,
                             child: ListView(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                               children: List.generate(_upcoming_events.length, (index) =>
                                   Card(
-                                    margin: EdgeInsets.symmetric(horizontal: 10),
-                                      child: Container(
-                                          width: 210,
-                                          height: 170,
-                                          child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children :[
-                                                ClipRRect(
-                                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                                  child:FadeInImage.assetNetwork(
-                                                    placeholder: "assets/placeholder.png",
-                                                    image: CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),
-                                                    width: 210,
-                                                    height: 120,
-                                                    fit:BoxFit.fill,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(top: 10, left: 10, right: 10,),
-                                                  child: Text(_upcoming_events[index]["name"], style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                                                ),
-                                                Container(
-                                                    padding: EdgeInsets.only(top: 0, left: 10, right: 10,),
-                                                    child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: TextStyle(fontSize: 13),)
-                                                )
-                                              ]
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: InkWell(
+                                          onTap: () => {},
+                                          customBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Container(
+                                              width: 210,
+                                              height: 180,
+                                              child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children :[
+                                                    ClipRRect(
+                                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                      child:FadeInImage.assetNetwork(
+                                                        placeholder: "assets/placeholder.png",
+                                                        image: CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),
+                                                        width: 250,
+                                                        height: 120,
+                                                        fit:BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets.only(top: 10, left: 10, right: 10,),
+                                                      child: Text(_upcoming_events[index]["name"], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                                    ),
+                                                    Container(
+                                                        padding: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
+                                                        child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: const TextStyle(fontSize: 13),)
+                                                    )
+                                                  ]
+                                              )
                                           )
                                       )
                                   )
@@ -128,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           children: List.generate(_past_events.length, (index) =>
                               ListTile(
+                                onTap: (){},
                                 leading: ClipRRect(
                                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                                   child: Image.network(

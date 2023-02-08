@@ -18,13 +18,30 @@ class _GuestScreenState extends State<GuestScreen> {
           return Scaffold(
 
               body: Center(
-                child:
-                  ElevatedButton(onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
-                  }, child: Text("Login now"))
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Icon(Icons.account_circle, size: 130, color: Colors.grey,),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15),
+                      child: Text("Authentication required", style: TextStyle(fontSize: 18),),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: Text("Please login to mangage", style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    ),
+                    ElevatedButton(onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
+                    }, child: Text("Login now"))
+                  ],
+                )
+
               )
           );
         }

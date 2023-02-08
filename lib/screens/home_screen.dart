@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                   flex: 1,
                                   child: Container(
-                                      child: Text("Eksafar", style: TextStyle(fontSize: 20),)
+                                      child: Text("Flutter Application", style: TextStyle(fontSize: 20),)
                                   )
                               ),
                               Flexible(

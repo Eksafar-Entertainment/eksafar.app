@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
                 bottom:  PreferredSize(
                   preferredSize: Size.fromHeight(50.0), // here the desired height
-                  child: Center(
+                  child: Container(
                     child: TextField(
                       onChanged: (String value){},
                       decoration: const InputDecoration(

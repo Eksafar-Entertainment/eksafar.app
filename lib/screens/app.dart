@@ -16,12 +16,12 @@ class App extends StatelessWidget {
         child:MaterialApp(
           title: 'Eksafar',
           theme: ThemeData(
-            //brightness: Brightness.,
+            brightness: Brightness.dark,
             primarySwatch: Colors.teal,
             primaryColor: Colors.teal,
             useMaterial3: true
           ),
-          themeMode: ThemeMode.system,
+          themeMode: ThemeMode.dark,
           home: const MainScreen(),
         )
     );

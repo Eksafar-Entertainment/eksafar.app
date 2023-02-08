@@ -1,14 +1,8 @@
 import 'package:eksafar/models/app_state.dart';
-import 'package:eksafar/redux/actions.dart';
-import 'package:eksafar/screens/app.dart';
-import 'package:eksafar/screens/login_screen.dart';
 import 'package:eksafar/service/app_service.dart';
-import 'package:eksafar/service/auth_service.dart';
 import 'package:eksafar/service/commom_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -108,8 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children :[
                                               ClipRRect(
                                                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                                                child:Image.network(
-                                                  CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),
+                                                child:FadeInImage.assetNetwork(
+                                                  placeholder: "assets/placeholder.png",
+                                                  image: CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),
                                                   width: 230,
                                                   height: 160,
                                                   fit:BoxFit.fill,

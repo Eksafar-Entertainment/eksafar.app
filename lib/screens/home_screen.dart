@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     title: Text(_past_events[index]["name"]),
-                                    subtitle: Text(_past_events[index]["start_date"]),
+                                    subtitle: Text(_past_events[index]["venue_name"]+" • "+_past_events[index]["start_date"], style: const TextStyle(fontSize: 13),),
                                   )
                               ),
                             )

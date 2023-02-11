@@ -65,7 +65,10 @@ class _MainScreenState extends State<MainScreen> {
                     icon: const Icon(Icons.account_circle),
                     tooltip: '',
                     onPressed: () {
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                      );
                     },
                   ),
                 ],

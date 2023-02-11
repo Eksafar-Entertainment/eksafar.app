@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context, state) {
           return Scaffold(
               appBar: AppBar(
-                title: const Text("Login"),
+                title: const Text(""),
                 centerTitle: true,
               ),
               body: SingleChildScrollView(

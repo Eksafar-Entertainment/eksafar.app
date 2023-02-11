@@ -11,6 +11,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_html/flutter_html.dart';
+import "package:intl/intl.dart";
 class EventDetailsScreen extends StatefulWidget {
   int event_id;
   EventDetailsScreen({super.key, required this.event_id});
@@ -94,7 +95,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 }
                             ),
                             actions: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.share))
+                              IconButton(
+                                  onPressed: (){},
+                                  icon: Icon(Icons.share)
+                              )
                             ],
                           ),
                           SliverToBoxAdapter(
@@ -110,24 +114,24 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.bookmark, size: 22,color: Theme.of(context).primaryColor),
+                                          Icon(Icons.class_, size: 22,color: Theme.of(context).primaryColor),
                                           Container(width:10),
                                           Text(_event?["event_type"]?? ""),
                                         ],
                                       )
                                   ),
 
-                                  Container(
+                                  _event_tickets.length > 0 ? Container(
                                       width: double.infinity,
                                       padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                                       child: Row(
                                         children: [
                                           Icon(Icons.access_time, size: 22,color: Theme.of(context).primaryColor),
                                           Container(width:10),
-                                          Text(_event_tickets.length > 0?_event_tickets?[0]?["start_datetime"]?? "":""),
+                                          Text("${DateFormat("hh:mma, E d MMM y").format(DateTime.parse(_event_tickets?[0]?["start_datetime"]?? ""))} onwards"),
                                         ],
                                       )
-                                  ),
+                                  ) : Container(),
                                   Container(
                                       width: double.infinity,
                                       padding: EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -174,6 +178,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
 
                                   //Artists section
+                                  Container(
+                                    padding: EdgeInsets.only(top: 15, bottom: 0, left: 25, right: 25),
+                                    width: double.infinity,
+                                    child: Text("Artists", style: TextStyle(fontSize: 16),),
+                                  ),
 
                                   Container(
                                       padding: EdgeInsets.symmetric( vertical: 15),
@@ -206,6 +215,44 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       )
                                   ),
 
+                                  //venue section
+                                  Container(
+                                    padding: EdgeInsets.only(top: 15, bottom: 10, left: 25, right: 25),
+                                    width: double.infinity,
+                                    child: Text("Venue", style: TextStyle(fontSize: 16),),
+                                  ),
+
+                                  Container(
+                                      padding: EdgeInsets.only(top: 5, bottom: 15, left: 25, right: 25),
+                                      width: double.infinity,
+                                      child: Row(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: const BorderRadius.all(Radius.circular(120)),
+                                            child: Image.network(CommonService.generateResourceUrl(_venue?["logo"]??""), height: 50, width: 50,),
+                                          ),
+                                          Container(width:10),
+                                          Flexible(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(_venue?["name"] ?? ""),
+                                                  Text(_venue?["address"] ?? "", style: TextStyle(fontSize: 12, color: Colors.grey),),
+                                                ],
+                                              )
+                                          )
+                                        ],
+                                      )
+                                  ),
+
+
+                                  //terms and conditions section
+                                  Container(
+                                    padding: EdgeInsets.only(top: 15, bottom: 0, left: 25, right: 25),
+                                    width: double.infinity,
+                                    child: Text("Terms & Conditions", style: TextStyle(fontSize: 16),),
+                                  ),
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                                     child: Html(data:  _event?["terms"]??"",),
@@ -216,6 +263,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ],
                       ),
                     ),
+                    _event_tickets.length > 0 ?
                     Container(
                       width: double.infinity,
                       color: Theme.of(context).primaryColor,
@@ -227,7 +275,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             child: Text("Book Now", textAlign: TextAlign.center,),
                           )
                       ),
-                    )
+                    ) : Container()
                   ]
               )
           );

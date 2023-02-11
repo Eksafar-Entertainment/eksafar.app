@@ -21,7 +21,7 @@ class App extends StatelessWidget {
             primarySwatch: Colors.pink,
             primaryColor: Colors.pink,
             useMaterial3: true,
-            fontFamily: GoogleFonts.outfit().fontFamily
+            fontFamily: GoogleFonts.outfit().fontFamily,
           ),
           themeMode: ThemeMode.dark,
           home: const MainScreen(),

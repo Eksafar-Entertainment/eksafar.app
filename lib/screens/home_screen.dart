@@ -33,9 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _generateLocations(List<dynamic> locations){
     List<Padding> list = [Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5),
+        padding: EdgeInsets.symmetric(horizontal: 2.5),
         child:   ButtonTheme(
           height: 30.0,
+          minWidth: 10,
           child: MaterialButton(
             color: null == _selected_location? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
             shape: OutlineInputBorder(
@@ -51,9 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     )];
     locations.forEach((element) {
       list.add(Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: EdgeInsets.symmetric(horizontal: 2.5),
           child:   ButtonTheme(
             height: 30.0,
+            minWidth: 10,
             child: MaterialButton(
               color: element["id"] == _selected_location? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
               shape: OutlineInputBorder(
@@ -86,10 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.white.withOpacity(0.03),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 2.5, vertical: 1.5),
                       child: Container(
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -110,17 +112,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                                     child: Row(
                                         children:  [
-                                          const Text("UPCOMING EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1),),
+                                          const Text("UPCOMING EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.1),),
                                           const Spacer(flex: 1,),
                                           InkWell(
                                             onTap: (){},
-                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor),),
+                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 13),),
                                           )
                                         ]
                                     )
                                 ),
                                 Container(
-                                    height: 210,
+                                    height: 220,
                                     child: ListView(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
@@ -139,8 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
                                                   child: Container(
-                                                      width: 250,
-                                                      height: 190,
+                                                      width: 260,
                                                       child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children :[
@@ -149,18 +150,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               child:FadeInImage.assetNetwork(
                                                                 placeholder: "assets/placeholder.png",
                                                                 image: CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),
-                                                                width: 250,
-                                                                height: 120,
+                                                                width: 260,
+                                                                height: 140,
                                                                 fit:BoxFit.fill,
                                                               ),
                                                             ),
                                                             Container(
                                                               padding: const EdgeInsets.only(top: 10, left: 15, right: 15,),
-                                                              child: Text(_upcoming_events[index]["name"], style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                                                              child: Text(_upcoming_events[index]["name"], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),),
                                                             ),
                                                             Container(
                                                                 padding: const EdgeInsets.only(top: 0, left: 15, right: 15, bottom: 10),
-                                                                child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: const TextStyle(fontSize: 13),)
+                                                                child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: const TextStyle(fontSize: 12, color: Colors.grey),)
                                                             )
                                                           ]
                                                       )
@@ -175,10 +176,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                                     child: Row(
                                         children:  [
-                                          const Text("PAST EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1),),
+                                          const Text("PAST EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.1),),
                                           Spacer(flex: 1,),
                                           InkWell(
-                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor)),
+                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 13)),
                                           )
                                         ]
                                     )
@@ -199,12 +200,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Image.network(
                                             CommonService.generateResourceUrl(_past_events[index]["cover_image"]??"",),
                                             height: 60,
-                                            width: 60,
+                                            width: 80,
                                             fit:BoxFit.cover,
                                           ),
                                         ),
-                                        title: Text(_past_events[index]["name"]),
-                                        subtitle: Text(_past_events[index]["venue_name"]+" • "+_past_events[index]["start_date"], style: const TextStyle(fontSize: 13),),
+                                        title: Text(_past_events[index]["name"], style: TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),),
+                                        subtitle: Text(_past_events[index]["venue_name"]+" • "+_past_events[index]["start_date"], style: const TextStyle(fontSize: 12, color: Colors.grey),),
                                       )
                                   ),
                                 )

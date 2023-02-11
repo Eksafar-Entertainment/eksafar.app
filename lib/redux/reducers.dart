@@ -7,6 +7,8 @@ AppState appStateReducers(AppState state, dynamic action) {
     return saveToken(state, action);
   } else if (action is LogoutAction) {
     return logout(state, action);
+  }  else if (action is SaveLocationsAction) {
+    return saveLocations(state, action);
   }
   return state;
 }
@@ -18,5 +20,10 @@ AppState saveToken(AppState state, SaveTokenAction action) {
 
 AppState logout(AppState state, LogoutAction action) {
   state.accessToken = null;
+  return state;
+}
+
+AppState saveLocations(AppState state, SaveLocationsAction action) {
+  state.locations = action.locations;
   return state;
 }

@@ -8,6 +8,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../service/app_service.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
   @override
@@ -15,26 +17,24 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  PageController page = PageController(initialPage: 0);
-  int pageIndex = 0;
-  void _onItemTapped(int index) {
-    page.jumpToPage(index);
-    setState(() {
-      pageIndex = index;
-    });
-  }
-
+  List _locations = [];
   checkCredentials() async{
     final prefs = await SharedPreferences.getInstance();
     Store<AppState> store = StoreProvider.of(context);
     store.dispatch(SaveTokenAction(prefs.getString("access_token")!));
   }
 
+  fetchAppData() async{
+    var appData = await AppService.appData();
+    Store<AppState> store = StoreProvider.of(context);
+    store.dispatch(SaveLocationsAction(appData["locations"]));
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkCredentials();
+    fetchAppData();
   }
 
 
@@ -44,40 +44,34 @@ class _MainScreenState extends State<MainScreen> {
         converter: (store) => store.state,
         builder: (context, state) {
           return Scaffold(
-            body: PageView(
-              controller: page,
-              scrollDirection: Axis.horizontal,
-              pageSnapping: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                HomeScreen(),
-                HomeScreen(),
-                state.accessToken!=null? ProfileScreen(): GuestScreen(),
-                state.accessToken!=null? ProfileScreen(): GuestScreen(),
-              ],
-          ),
-            bottomNavigationBar: NavigationBar(
-              destinations: const <Widget>[
-                NavigationDestination(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
+              appBar: AppBar(
+                title: Container(
+                  child:Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    Image.asset("assets/logo-large.png", height: 20, width: 120, fit: BoxFit.contain,),
+                  ]
+                    ,) ,
                 ),
-                NavigationDestination(
-                  icon: Icon(Icons.favorite),
-                  label: 'Favorite',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.discount),
-                  label: 'Tickets',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.account_circle),
-                  label: 'Profile',
-                ),
-              ],
-              selectedIndex: pageIndex,
-              onDestinationSelected: _onItemTapped,
-            ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    tooltip: '',
+                    onPressed: () {
+                      fetchAppData();
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.account_circle),
+                    tooltip: '',
+                    onPressed: () {
+
+                    },
+                  ),
+                ],
+
+              ),
+              body:HomeScreen()
           );
         }
     );

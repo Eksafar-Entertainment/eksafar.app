@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonService{
-  static const String _host = "www.eksafar.club";
+  static const String _host = "stage.eksafar.club";
   static const int _port = 443;
   static const String _path = "/api";
   static const String _scheme = "https";
-  static generateUri(String path) {
-    return Uri(host: _host, port: _port, path: _path+path, scheme: _scheme);
+  static generateUri(String path, {Map<String, dynamic>?queryParams}) {
+    return Uri(host: _host, port: _port, path: _path+path, scheme: _scheme, queryParameters: queryParams);
   }
 
   static generateHeader(){

@@ -5,9 +5,11 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 class AppService{
   static mainPage(dynamic _loc_id) async {
-    Uri uri = CommonService.generateUri("/main-page", queryParams: {
-      "location": _loc_id.toString()
-    });
+    Map<String, dynamic> querParams = {};
+    if(_loc_id != null){
+      querParams["location"] = _loc_id.toString();
+    }
+    Uri uri = CommonService.generateUri("/main-page", queryParams: querParams);
     print(uri);
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()

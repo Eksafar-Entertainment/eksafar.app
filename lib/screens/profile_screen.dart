@@ -34,9 +34,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               appBar: AppBar(
                 title: const Text("Profile"),
               ),
-              body:
-              state.accessToken!=null ?Text( state.accessToken! ): GuestScreen()
-
+              body:state.accessToken==null ? GuestScreen() :(
+                  Center(
+                      child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Icon(Icons.account_circle, size: 120,),
+                          ),
+                          Container(
+                            child: Text("Hi!"),
+                          ),
+                          Container(
+                            child: Text("You are logged in!"),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: Text(state.accessToken!?? ""),
+                          ),
+                          Container(height: 14,),
+                          ElevatedButton(onPressed: logout, child: Text("Logout"))
+                        ],
+                      )
+                  )
+              )
           );
         }
     );

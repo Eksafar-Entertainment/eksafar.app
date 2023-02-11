@@ -2,7 +2,7 @@
     package="com.eksafar.app.eksafar">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="eksafar"
+        android:label="Eksafar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

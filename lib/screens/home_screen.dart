@@ -36,10 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child:   ButtonTheme(
           height: 30.0,
           child: MaterialButton(
-            color: null == _selected_location? Colors.purple: Colors.purple.withOpacity(0.1),
+            color: null == _selected_location? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(width: 1, color: Colors.purple)
+                borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor)
             ),
             onPressed: () {
               _handleSelectLocation(null);
@@ -54,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child:   ButtonTheme(
             height: 30.0,
             child: MaterialButton(
-              color: element["id"] == _selected_location? Colors.purple: Colors.purple.withOpacity(0.1),
+              color: element["id"] == _selected_location? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
               shape: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18),
-                  borderSide: BorderSide(width: 1, color: Colors.purple)
+                  borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor)
               ),
               onPressed: () {
                 _handleSelectLocation(element["id"]);
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const Spacer(flex: 1,),
                                           InkWell(
                                             onTap: (){},
-                                            child: const Icon(Icons.arrow_forward,),
+                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor),),
                                           )
                                         ]
                                     )
@@ -168,11 +168,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                                     child: Row(
-                                        children: const [
+                                        children:  [
                                           Text("Past Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
                                           Spacer(flex: 1,),
                                           InkWell(
-                                            child: Icon(Icons.arrow_forward),
+                                            child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor)),
                                           )
                                         ]
                                     )

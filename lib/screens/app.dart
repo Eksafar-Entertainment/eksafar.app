@@ -18,8 +18,8 @@ class App extends StatelessWidget {
           title: 'Eksafar',
           theme: ThemeData(
             brightness: Brightness.dark,
-            primarySwatch: Colors.purple,
-            primaryColor: Colors.purple,
+            primarySwatch: Colors.pink,
+            primaryColor: Colors.pink,
             useMaterial3: true,
             fontFamily: GoogleFonts.outfit().fontFamily
           ),

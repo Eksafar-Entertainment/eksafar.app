@@ -1,6 +1,6 @@
 class AppState {
-  String? accessToken = null;
-  List? locations = null;
+  String? accessToken;
+  List? locations;
 
   AppState({this.accessToken, this.locations});
   AppState.fromAppState(AppState another) {

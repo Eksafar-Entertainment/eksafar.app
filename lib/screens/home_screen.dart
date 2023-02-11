@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                                     child: Row(
                                         children:  [
-                                          const Text("Upcoming Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                                          const Text("UPCOMING EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1),),
                                           const Spacer(flex: 1,),
                                           InkWell(
                                             onTap: (){},
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     margin: const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
                                     child: Row(
                                         children:  [
-                                          Text("Past Events", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                                          const Text("PAST EVENTS", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1),),
                                           Spacer(flex: 1,),
                                           InkWell(
                                             child: Text("View More", style: TextStyle(color: Theme.of(context).primaryColor)),

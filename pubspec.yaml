@@ -41,6 +41,7 @@ dependencies:
   flutter_redux: ^0.10.0
   shared_preferences: ^2.0.17
   google_fonts: ^4.0.3
+  flutter_html: ^2.2.1
 
 dev_dependencies:
   flutter_test:

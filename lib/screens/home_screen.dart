@@ -1,4 +1,5 @@
 import 'package:eksafar/models/app_state.dart';
+import 'package:eksafar/screens/event_details_screen.dart';
 import 'package:eksafar/service/app_service.dart';
 import 'package:eksafar/service/commom_service.dart';
 import 'package:flutter/material.dart';
@@ -128,7 +129,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Card(
                                               margin: const EdgeInsets.symmetric(horizontal: 10),
                                               child: InkWell(
-                                                  onTap: () => {},
+                                                  onTap: () => {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => EventDetailsScreen(event_id: _upcoming_events[index]["id"])),
+                                                    )
+                                                  },
                                                   customBorder: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
@@ -182,7 +188,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   children: List.generate(_past_events.length, (index) =>
                                       ListTile(
-                                        onTap: (){},
+                                        onTap: (){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => EventDetailsScreen(event_id: _past_events[index]["id"])),
+                                          );
+                                        },
                                         leading: ClipRRect(
                                           borderRadius: const BorderRadius.all(Radius.circular(10)),
                                           child: Image.network(

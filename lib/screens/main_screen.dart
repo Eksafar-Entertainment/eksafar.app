@@ -17,7 +17,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List _locations = [];
   checkCredentials() async{
     final prefs = await SharedPreferences.getInstance();
     Store<AppState> store = StoreProvider.of(context);

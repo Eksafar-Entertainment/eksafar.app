@@ -5,6 +5,7 @@ import 'package:eksafar/service/commom_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ),
                                                             Container(
                                                                 padding: const EdgeInsets.only(top: 0, left: 15, right: 15, bottom: 10),
-                                                                child: Text(_upcoming_events[index]["venue_name"]+" • "+_upcoming_events[index]["start_date"], style: const TextStyle(fontSize: 12, color: Colors.grey),)
+                                                                child: Text("${_upcoming_events[index]["venue_name"]} • ${DateFormat("E d MMM y").format(DateTime.parse(_upcoming_events[index]["start_date"]))}", style: const TextStyle(fontSize: 12, color: Colors.grey),)
                                                             )
                                                           ]
                                                       )
@@ -204,8 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fit:BoxFit.cover,
                                           ),
                                         ),
-                                        title: Text(_past_events[index]["name"], style: TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),),
-                                        subtitle: Text(_past_events[index]["venue_name"]+" • "+_past_events[index]["start_date"], style: const TextStyle(fontSize: 12, color: Colors.grey),),
+                                        title: Text(_past_events[index]["name"], style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),),
+                                        subtitle: Text("${DateFormat("E d MMM y").format(DateTime.parse(_past_events[index]["start_date"]))} at ${_past_events[index]["venue_name"]}", style: const TextStyle(fontSize: 12, color: Colors.grey),),
                                       )
                                   ),
                                 )

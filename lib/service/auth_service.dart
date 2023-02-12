@@ -38,4 +38,42 @@ class AuthService{
     }
     throw Exception("Invalid Request");
   }
+
+  static sendOtp({required String mobie_no}) async {
+    Uri uri = CommonService.generateUri("/auth/login/send-otp");
+    var response = await http.post(
+        uri,
+        body: json.encode({
+          "mobile_no": mobie_no
+        }),
+        headers: CommonService.generateHeader()
+    );
+    print(response.body);
+    if(response.statusCode == 200) {
+      var body = json.decode(response.body);
+      return body;
+    }
+    throw Exception("Invalid credential");
+  }
+  static verifyOtp({required String mobie_no, required String otp_id, required String otp}) async {
+    Uri uri = CommonService.generateUri("/auth/login/verify-otp");
+    var response = await http.post(
+        uri,
+        body: json.encode({
+          "mobile_no": mobie_no,
+          "otp_id":otp_id,
+          "otp":otp
+        }),
+        headers: CommonService.generateHeader()
+    );
+    print(response.body);
+
+    if(response.statusCode == 200) {
+      var body = json.decode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("access_token", body["access_token"]);
+      return body;
+    }
+    throw Exception("Invalid credential");
+  }
 }

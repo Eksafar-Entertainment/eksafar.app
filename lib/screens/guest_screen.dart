@@ -1,5 +1,6 @@
 import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/screens/login_screen.dart';
+import 'package:eksafar/screens/otp_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -36,7 +37,7 @@ class _GuestScreenState extends State<GuestScreen> {
                     ElevatedButton(onPressed: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(builder: (context) => OtpLoginScreen()),
                       );
                     }, child: Text("Login now"))
                   ],

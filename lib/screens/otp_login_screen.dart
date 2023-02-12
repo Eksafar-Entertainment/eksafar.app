@@ -95,9 +95,6 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                                 margin: const EdgeInsets.only(bottom: 60),
                                 child: const Text("Use you credential and login to your account",  textAlign: TextAlign.center,),
                               ),
-
-
-
                               Container(
                                 width: double.infinity,
                                 margin: const EdgeInsets.only(bottom: 35),

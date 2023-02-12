@@ -3,6 +3,7 @@ import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/app.dart';
 import 'package:eksafar/screens/guest_screen.dart';
 import 'package:eksafar/screens/login_screen.dart';
+import 'package:eksafar/screens/otp_login_screen.dart';
 import 'package:eksafar/service/auth_service.dart';
 import 'package:eksafar/service/commom_service.dart';
 import 'package:eksafar/service/event_service.dart';
@@ -268,7 +269,22 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       width: double.infinity,
                       color: Theme.of(context).primaryColor,
                       child: InkWell(
-                          onTap: (){},
+                          onTap: (){
+                            if(state.accessToken == null){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => OtpLoginScreen()),
+                              );
+                            } else{
+                              final scaffold = ScaffoldMessenger.of(context);
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: const Text('Added to favorite'),
+                                  action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+                                ),
+                              );
+                            }
+                          },
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),

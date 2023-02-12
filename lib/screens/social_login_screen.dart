@@ -37,7 +37,7 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> {
               title: Text("Login"),
             ),
             body: WebView(
-              userAgent: 'random',
+              userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController controller){
                 _controller = controller;

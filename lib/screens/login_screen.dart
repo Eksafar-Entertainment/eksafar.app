@@ -1,6 +1,7 @@
 import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/app.dart';
+import 'package:eksafar/screens/social_login_screen.dart';
 import 'package:eksafar/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -123,8 +124,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                     width: double.infinity, // <-- match_parent
                                     height: 45, // <-- match-parent
                                     child: ElevatedButton(
-                                        onPressed: () {login();},
-                                        child: const Text("Log In"),
+                                      onPressed: () {login();},
+                                      child: const Text("Log In"),
+                                    ),
+                                  )
+                              ),
+                              Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(bottom: 25, top: 25),
+                                  child:SizedBox(
+                                    width: double.infinity, // <-- match_parent
+                                    height: 45, // <-- match-parent
+                                    child: ElevatedButton(
+                                      onPressed: () {
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => SocialLoginScreen(platform: "google")),
+                                        );
+                                        },
+                                      child: const Text("Log In with google"),
                                     ),
                                   )
                               )

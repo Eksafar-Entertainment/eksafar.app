@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonService{
-  static const String _host = "www.eksafar.club";
+  static const String _host = "stage.eksafar.club";
   static const int _port = 443;
   static const String _path = "/api";
   static const String _scheme = "https";

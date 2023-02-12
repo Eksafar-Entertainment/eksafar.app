@@ -25,7 +25,7 @@ class CommonService{
   }
 
   static generateResourceUrl(String path){
-    return _scheme+"://"+_host+":"+_port.toString()+""+path;
+    return "$_scheme://$_host:$_port$path";
   }
 
 }

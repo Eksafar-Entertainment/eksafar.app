@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Container(
                                   width: double.infinity,
-                                  margin: const EdgeInsets.only(bottom: 25, top: 25),
+                                  margin: const EdgeInsets.only(bottom: 5, top: 25),
                                   child:SizedBox(
                                     width: double.infinity, // <-- match_parent
                                     height: 45, // <-- match-parent
@@ -136,14 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     width: double.infinity, // <-- match_parent
                                     height: 45, // <-- match-parent
                                     child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red,
+                                      ),
                                       onPressed: () {
-
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(builder: (context) => SocialLoginScreen(platform: "google")),
                                         );
                                         },
-                                      child: const Text("Log In with google"),
+                                      child: const Text("Log In with google", style: TextStyle(color: Colors.white),),
                                     ),
                                   )
                               )

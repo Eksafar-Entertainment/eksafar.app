@@ -1,6 +1,7 @@
 import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/app.dart';
+import 'package:eksafar/screens/event_booking_screen.dart';
 import 'package:eksafar/screens/guest_screen.dart';
 import 'package:eksafar/screens/login_screen.dart';
 import 'package:eksafar/screens/otp_login_screen.dart';
@@ -279,12 +280,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 MaterialPageRoute(builder: (context) => OtpLoginScreen()),
                               );
                             } else{
-                              final scaffold = ScaffoldMessenger.of(context);
-                              scaffold.showSnackBar(
-                                SnackBar(
-                                  content: const Text('Added to favorite'),
-                                  action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
-                                ),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EventBookingScreen(event: _event)),
                               );
                             }
                           },

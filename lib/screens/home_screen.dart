@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                                   children :[
                                                                     ClipRRect(
-                                                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                                                                       child:FadeInImage.assetNetwork(
                                                                         placeholder: "assets/placeholder.png",
                                                                         image: CommonService.generateResourceUrl(_upcoming_events[index]["cover_image"]??"",),

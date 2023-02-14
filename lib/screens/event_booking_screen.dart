@@ -1,19 +1,9 @@
 import 'package:eksafar/models/app_state.dart';
-import 'package:eksafar/redux/actions.dart';
-import 'package:eksafar/screens/app.dart';
-import 'package:eksafar/screens/guest_screen.dart';
-import 'package:eksafar/screens/login_screen.dart';
-import 'package:eksafar/screens/otp_login_screen.dart';
-import 'package:eksafar/screens/payment_screen.dart';
-import 'package:eksafar/service/auth_service.dart';
-import 'package:eksafar/service/commom_service.dart';
 import 'package:eksafar/service/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_html/flutter_html.dart';
 import "package:intl/intl.dart";
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 class EventBookingScreen extends StatefulWidget {
   var event;
   EventBookingScreen({super.key, required this.event});
@@ -22,6 +12,7 @@ class EventBookingScreen extends StatefulWidget {
 }
 
 class _EventBookingScreenState extends State<EventBookingScreen> {
+  Razorpay? _razorpay;
   var _date_tickets = null;
   var _tickets = null;
   var _dates = null;
@@ -101,10 +92,19 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
     try {
       var response = await EventService.createCheckoutSession(data);
       print(response);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PaymentScreen(url: response["url"],)),
-      );
+      var options = {
+        'key': response["key"],
+        'amount':  response["order_details"]["amount"], //in the smallest currency sub-unit.
+        'name': "Eksafar Entertainment",
+        'order_id': response["order_details"]["id"], // Generate order_id using Orders API
+        'description': 'Ticket Booking',
+        'timeout': 60, // in seconds
+        'prefill': {
+          'contact': response["user"]["mobile"],
+          'email': response["user"]["email"]
+        }
+      };
+      _razorpay?.open(options);
     }catch(err){
       print(err);
     }
@@ -118,6 +118,33 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
     // TODO: implement initState
     super.initState();
     fetchTickets();
+
+    _razorpay = Razorpay();
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+  }
+  void showAlert(String message) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(message),
+        ));
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    showAlert("Successfully booked ticked");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    showAlert(response.message.toString() + response.code.toString());
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
   }
   @override
   Widget build(BuildContext _context) {

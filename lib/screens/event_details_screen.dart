@@ -22,7 +22,6 @@ class EventDetailsScreen extends StatefulWidget {
 
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   var _event;
-  var _event_tickets;
   var _venue;
   var _artists;
   bool _loading = true;
@@ -36,10 +35,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     var response = await EventService.details(eventId);
     setState(() {
       _event = response["event"];
-      _event_tickets = response["event_tickets"];
       _venue = response["venue"];
       _artists = response["artists"];
       _loading = false;
+
+      print(_event);
     });
   }
   @override
@@ -122,14 +122,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                       )
                                   ),
 
-                                  _event_tickets.length > 0 ? Container(
+                                  _event["has_tickets"]?? false ? Container(
                                       width: double.infinity,
                                       padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                                       child: Row(
                                         children: [
                                           Icon(Icons.access_time, size: 22,color: Theme.of(context).primaryColor),
                                           Container(width:10),
-                                          Text("${DateFormat("hh:mma, E d MMM y").format(DateTime.parse(_event_tickets?[0]?["start_datetime"]?? ""))} onwards"),
+                                          Text("${DateFormat("hh:mma, E d MMM y").format(DateTime.parse(_event["start_datetime"]?? ""))} onwards"),
                                         ],
                                       )
                                   ) : Container(),
@@ -264,7 +264,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ],
                       ),
                     ),
-                    _event_tickets.length > 0 ?
+
+
+                    //for available tickets only
+                    (_event["has_tickets"]) && (!_event["is_past"]) ?
                     Container(
                       width: double.infinity,
                       color: Theme.of(context).primaryColor,
@@ -288,7 +291,30 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                            child: Text("Book Now", textAlign: TextAlign.center,),
+                            child: Text("BOOK NOW", textAlign: TextAlign.center,),
+                          )
+                      ),
+                    ) : Container(),
+
+                    (_event["is_coming_soon"]) ?
+                    Container(
+                      width: double.infinity,
+                      color: Theme.of(context).primaryColor,
+                      child: InkWell(
+                          onTap: (){
+                            if(state.accessToken == null){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => OtpLoginScreen()),
+                              );
+                            } else{
+
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                            child: Text("NOTIFY ME", textAlign: TextAlign.center,),
                           )
                       ),
                     ) : Container()

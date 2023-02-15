@@ -145,6 +145,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Navigator.pop(context);
     // Do something when payment succeeds
     showAlert("Congratulation booking successful", true);
   }

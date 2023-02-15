@@ -48,12 +48,7 @@ class AuthService{
         }),
         headers: CommonService.generateHeader()
     );
-    print(response.body);
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid credential");
+    return CommonService.analyzeResponse(response);
   }
   static verifyOtp({required String mobie_no, required String otp_id, required String otp}) async {
     Uri uri = CommonService.generateUri("/auth/login/verify-otp");
@@ -66,14 +61,9 @@ class AuthService{
         }),
         headers: CommonService.generateHeader()
     );
-    print(response.body);
-
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString("access_token", body["access_token"]);
-      return body;
-    }
-    throw Exception("Invalid credential");
+    var data =  CommonService.analyzeResponse(response);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("access_token", data["access_token"]);
+    return data;
   }
 }

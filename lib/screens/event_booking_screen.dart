@@ -106,7 +106,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
       };
       _razorpay?.open(options);
     }catch(err){
-      print(err);
+      showAlert(err.toString(), false);
     }
     setState(() {
       _quantities = {};
@@ -125,26 +125,38 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
     _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
   }
-  void showAlert(String message) {
+  void showAlert(String message, bool success) {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          content: Text(message),
-        ));
+        builder: (context) => Dialog(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            height: 150,
+            child: Column(
+              children: [
+                Icon(success?Icons.check : Icons.error, color: success?Colors.green:Colors.red, size: 50,),
+                Container(height: 15,),
+                Text(message, style: TextStyle(), textAlign: TextAlign.center,),
+              ],
+            ),
+          ),
+        )
+    );
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     // Do something when payment succeeds
-    showAlert("Successfully booked ticked");
+    showAlert("Congratulation booking successful", true);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
-    showAlert(response.message.toString() + response.code.toString());
+    showAlert(response.message.toString() + response.code.toString(), false);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Do something when an external wallet was selected
+    showAlert(response.walletName.toString(), true);
   }
   @override
   Widget build(BuildContext _context) {
@@ -162,7 +174,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
 
           return Scaffold(
               appBar: AppBar(
-                  title: Text(widget?.event?["name"]??"")
+                  title: Text(widget.event?["name"]??"")
               ),
               body : Column(
                 children: [
@@ -219,7 +231,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                         shrinkWrap: true,
                         children: List.generate(_tickets.length, (index) =>
                             ListTile(
-                              title: Text("${_tickets[index]["name"]} @ ₹${_tickets[index]["price"]} ${_tickets[index]["id"]}"),
+                              title: Text("${_tickets[index]["name"]} @ ₹${_tickets[index]["price"]}"),
                               subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
                               trailing: Container(
                                 width: 120,

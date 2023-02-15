@@ -7,11 +7,7 @@ class EventService{
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()
     );
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid Request");
+    return CommonService.analyzeResponse(response);
   }
 
   static tickets(int event_id) async {
@@ -19,11 +15,7 @@ class EventService{
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()
     );
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid Request");
+    return CommonService.analyzeResponse(response);
   }
 
   static createCheckoutSession(var data) async {
@@ -33,10 +25,6 @@ class EventService{
         headers: await CommonService.generateSecureHeader(),
     );
 
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid Request");
+    return CommonService.analyzeResponse(response);
   }
 }

@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:eksafar/redux/actions.dart';
+import 'package:eksafar/redux/store.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonService{
@@ -26,6 +31,24 @@ class CommonService{
 
   static generateResourceUrl(String path){
     return "$_scheme://$_host:$_port$path";
+  }
+
+  static dynamic analyzeResponse(Response response){
+    try{
+      var body = json.decode(response.body);
+      if(response.statusCode == 200) {
+        return body;
+      } else if(response.statusCode == 403){
+        appStore.dispatch(LogoutAction());
+        print(body["message"]);
+        throw Exception(body["message"]);
+      } else {
+        print(body["message"]);
+        throw Exception(body["message"]);
+      }
+    } catch(err){
+      throw Exception(err);
+    }
   }
 
 }

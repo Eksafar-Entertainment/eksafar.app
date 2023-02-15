@@ -14,11 +14,7 @@ class AppService{
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()
     );
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid Request");
+    return CommonService.analyzeResponse(response);
   }
 
   static appData() async {
@@ -26,11 +22,6 @@ class AppService{
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()
     );
-    print(response.body);
-    if(response.statusCode == 200) {
-      var body = json.decode(response.body);
-      return body;
-    }
-    throw Exception("Invalid Request");
+    return CommonService.analyzeResponse(response);
   }
 }

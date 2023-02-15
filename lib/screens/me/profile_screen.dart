@@ -4,6 +4,7 @@ import 'package:eksafar/screens/app.dart';
 import 'package:eksafar/screens/guest_screen.dart';
 import 'package:eksafar/screens/login_screen.dart';
 import 'package:eksafar/service/auth_service.dart';
+import 'package:eksafar/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -16,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var _user = null;
   logout () async {
     try {
       await AuthService.logout();
@@ -25,6 +27,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Store<AppState> store = StoreProvider.of(context);
     store.dispatch(LogoutAction());
   }
+
+  fetchProfile() async {
+    var response = await UserService.profile();
+    setState(() {
+      _user = response["data"];
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchProfile();
+  }
   @override
   Widget build(BuildContext _context) {
     return StoreConnector<AppState, AppState>(
@@ -33,9 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Scaffold(
               appBar: AppBar(
                 title: const Text("Profile"),
+                actions: [
+                  IconButton(onPressed: logout, icon: Icon(Icons.logout))
+                ],
               ),
               body:state.accessToken==null ? GuestScreen() :(
-                  Center(
+                  SingleChildScrollView(
                       child:Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -43,17 +62,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Icon(Icons.account_circle, size: 120,),
                           ),
                           Container(
-                            child: Text("Hi!"),
+                            child: Text("${_user?["name"]??""}", style: TextStyle(fontSize: 18),),
                           ),
                           Container(
-                            child: Text("You are logged in!"),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            child: Text(state.accessToken!?? ""),
+                            child: Text(_user?["email"]??""),
                           ),
                           Container(height: 14,),
-                          ElevatedButton(onPressed: logout, child: Text("Logout"))
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Card(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                child: Text("Tickets"),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                   )

@@ -2,7 +2,7 @@ import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/guest_screen.dart';
 import 'package:eksafar/screens/home_screen.dart';
-import 'package:eksafar/screens/profile_screen.dart';
+import 'package:eksafar/screens/me/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';

@@ -3,6 +3,7 @@ import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/app.dart';
 import 'package:eksafar/screens/guest_screen.dart';
 import 'package:eksafar/screens/login_screen.dart';
+import 'package:eksafar/screens/me/orders.dart';
 import 'package:eksafar/service/auth_service.dart';
 import 'package:eksafar/service/user_service.dart';
 import 'package:flutter/material.dart';
@@ -68,16 +69,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text(_user?["email"]??""),
                           ),
                           Container(height: 14,),
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Card(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                                child: Text("Tickets"),
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const OrdersScreen()),
+                              );
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: Card(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                  child: Text("Tickets"),
+                                ),
                               ),
                             ),
-                          ),
+                          )
                         ],
                       )
                   )

@@ -11,4 +11,15 @@ class UserService{
     );
     return CommonService.analyzeResponse(response);
   }
+
+  static orders(int page) async {
+    Map<String, dynamic> querParams = {
+      "page": page.toString()
+    };
+    Uri uri = CommonService.generateUri("/me/orders",     queryParams: querParams,);
+    var response = await http.get(uri,
+      headers: await CommonService.generateSecureHeader(),
+    );
+    return CommonService.analyzeResponse(response);
+  }
 }

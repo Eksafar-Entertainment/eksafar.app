@@ -1,4 +1,5 @@
 import 'package:eksafar/models/app_state.dart';
+import 'package:eksafar/service/commom_service.dart';
 import 'package:eksafar/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -66,8 +67,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     data: order["id"].toString(),
                     version: QrVersions.auto,
                     size: 200,
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
                 ),
                 Text(order["event_name"]),
                 Text(
@@ -116,29 +117,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemCount: _orders.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(_orders[index]["event_name"]),
+                    title: Text(_orders[index]["event_name"], style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),),
                     subtitle: Text(
-                      "Qtde: ${_orders[index]["quantity"].toString()} - ₹${_orders[index]["total_price"].toString()}",
+                      "${DateFormat("E d MMM y").format(DateTime.parse(_orders[index]["event_datetime"]))}",
                       style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 12
                       ),
                     ),
-                    leading: Container(
-                      width: 45,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                            width: 1
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(15))
-                      ),
-                      child: Column(
-                        children: [
-                          Text(DateFormat("d").format(DateTime.parse(_orders[index]["event_datetime"])), style: TextStyle(fontSize: 18),),
-                          Text(DateFormat("MMM").format(DateTime.parse(_orders[index]["event_datetime"])),style: TextStyle(fontSize: 12),)
-                        ],
+                    leading: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: Image.network(
+                        CommonService.generateResourceUrl(_orders[index]["cover_image"]??"",),
+                        height: 60,
+                        width: 80,
+                        fit:BoxFit.cover,
                       ),
                     ),
                     onTap: (){

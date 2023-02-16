@@ -102,6 +102,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                                   readOnly: _otp_id!=null,
                                   controller: _mobileNoController,
                                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     return (value?.length ?? 0) < 10 ? "Please enter correct mobile number": null;
                                   },
@@ -122,6 +123,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                                 child: TextFormField(
                                   controller: _otpController,
                                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     return value!.length < 6 ? "Please enter password": null;
                                   },

@@ -177,116 +177,117 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
               appBar: AppBar(
                   title: Text(widget.event?["name"]??"")
               ),
-              body : Column(
-                children: [
-                  Visibility(
-                    visible: _dates.length > 0,
-                    child:   Container(
-                        width: double.infinity,
-                        color: Colors.white.withOpacity(0.03),
-                        alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                          child: Container(
-                              child:Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: List.generate(_dates.length, (index) =>
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 5),
-                                        child: ButtonTheme(
-                                          height: 70.0,
-                                          minWidth: 10,
-                                          child: MaterialButton(
-                                            color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                                            shape: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(18),
-                                                borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor)
+              body : Container(
+
+                  child:
+                  Column(
+                    children: [
+                      Visibility(
+                        visible: _dates.length > 0,
+                        child:   Container(
+                            width: double.infinity,
+                            color: Colors.white.withOpacity(0.03),
+                            alignment: Alignment.center,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                              child: Container(
+                                  child:Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: List.generate(_dates.length, (index) =>
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 5),
+                                            child: ButtonTheme(
+                                              height: 70.0,
+                                              minWidth: 10,
+                                              child: MaterialButton(
+                                                color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                shape: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(18),
+                                                    borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor)
+                                                ),
+                                                onPressed: (){
+                                                  setState(() {
+                                                    selectDate(_dates[index]);
+                                                  });
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Text("${DateFormat("d").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 20)),
+                                                    Text("${DateFormat("E").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 10)),
+                                                    Text("${DateFormat("MMM").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 12)),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                            onPressed: (){
-                                              setState(() {
-                                                selectDate(_dates[index]);
-                                              });
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Text("${DateFormat("d").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 20)),
-                                                Text("${DateFormat("E").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 10)),
-                                                Text("${DateFormat("MMM").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 12)),
-                                              ],
+                                          )
+                                      )
+                                  )
+                              ),
+                            )
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child:  ListView(
+
+                              children: List.generate(_tickets.length, (index) =>
+                                  ListTile(
+                                      title: Text("${_tickets[index]["name"]} @ ₹${_tickets[index]["price"]}"),
+                                      subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
+                                      trailing: Container(
+                                        width: 120,
+                                        height: 30,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                                color: Theme.of(context).primaryColor,
+                                                padding: EdgeInsets.all(0),
+                                                onPressed: (){
+                                                  changeQty(_tickets[index]["id"], -1);
+                                                },
+                                                icon: Icon(Icons.remove, size: 20,)
                                             ),
-                                          ),
+                                            Container(
+                                                width: 20,
+                                                child: Text((_quantities[_tickets[index]["id"]]??0).toString(), textAlign: TextAlign.center,)
+                                            ) ,
+                                            IconButton(
+                                                color: Theme.of(context).primaryColor,
+                                                padding: EdgeInsets.all(0),
+                                                onPressed: (){
+                                                  changeQty(_tickets[index]["id"], 1);
+                                                },
+                                                icon: Icon(Icons.add, size: 20,)
+                                            ),
+                                          ],
                                         ),
                                       )
                                   )
                               )
-                          ),
-                        )
-                    ),
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child:  SingleChildScrollView(
-                          child: ListView(
-                        shrinkWrap: true,
-                        children: List.generate(_tickets.length, (index) =>
-                            ListTile(
-                              title: Text("${_tickets[index]["name"]} @ ₹${_tickets[index]["price"]}"),
-                              subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
-                              trailing: Container(
-                                width: 120,
-                                height: 30,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                        color: Theme.of(context).primaryColor,
-                                        padding: EdgeInsets.all(0),
-                                        onPressed: (){
-                                          changeQty(_tickets[index]["id"], -1);
-                                        },
-                                          icon: Icon(Icons.remove, size: 20,)
-                                    ),
-                                    Container(
-                                      width: 20,
-                                        child: Text((_quantities[_tickets[index]["id"]]??0).toString(), textAlign: TextAlign.center,)
-                                    ) ,
-                                    IconButton(
-                                      color: Theme.of(context).primaryColor,
-                                        padding: EdgeInsets.all(0),
-                                        onPressed: (){
-                                          changeQty(_tickets[index]["id"], 1);
-                                        },
-                                        icon: Icon(Icons.add, size: 20,)
-                                    ),
-                                  ],
-                                ),
-                              )
+                          )
+                      ),
+                      Container(
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor,
+                        child: InkWell(
+                            onTap: (){
+                              createCheckoutSession();
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                              child: Text("PAY (₹${_total.toString()})", textAlign: TextAlign.center,),
                             )
                         ),
-                      )
-                      )
-                  ),
-                  Container(
-                    width: double.infinity,
-                    color: Theme.of(context).primaryColor,
-                    child: InkWell(
-                        onTap: (){
-                          createCheckoutSession();
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                          child: Text("PAY (₹${_total.toString()})", textAlign: TextAlign.center,),
-                        )
-                    ),
-                  ),
+                      ),
 
-                ],
+                    ],
+                  )
               )
           );
-
         }
     );
   }

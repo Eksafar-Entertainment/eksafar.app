@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/service/event_service.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
   var _tickets = null;
   var _dates = null;
   var _selected_date = null;
+  var _timer;
 
 
   var _quantities = {};
@@ -73,7 +76,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
     });
   }
 
-  createCheckoutSession() async {
+  processBooking() async {
     Map<String, dynamic> data = {
       "event_id": widget.event["id"]
     };
@@ -88,23 +91,38 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
       }
     }
 
+    if(items.isEmpty){
+      return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please select ticket"),
+        backgroundColor: Colors.red,
+      ));
+    }
+
     data["items"] = items;
     try {
       var response = await EventService.createCheckoutSession(data);
-      print(response);
-      var options = {
-        'key': response["key"],
-        'amount':  response["order_details"]["amount"], //in the smallest currency sub-unit.
-        'name': "Eksafar Entertainment",
-        'order_id': response["order_details"]["id"], // Generate order_id using Orders API
-        'description': 'Ticket Booking',
-        'timeout': 60, // in seconds
-        'prefill': {
-          'contact': response["user"]["mobile"],
-          'email': response["user"]["email"]
-        }
-      };
-      _razorpay?.open(options);
+      if(response["is_free"]){
+        Navigator.pop(context);
+        showAlert("Congratulation booking successful", true);
+      } else {
+        print(response);
+        var options = {
+          'key': response["key"],
+          'amount': response["order_details"]["amount"],
+          //in the smallest currency sub-unit.
+          'name': "Eksafar Entertainment",
+          'order_id': response["order_details"]["id"],
+          // Generate order_id using Orders API
+          'description': 'Ticket Booking',
+          'timeout': 60,
+          // in seconds
+          'prefill': {
+            'contact': response["user"]["mobile"],
+            'email': response["user"]["email"]
+          }
+        };
+        _razorpay?.open(options);
+      }
     }catch(err){
       showAlert(err.toString(), false);
     }
@@ -175,114 +193,194 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
 
           return Scaffold(
               appBar: AppBar(
-                  title: Text(widget.event?["name"]??"")
-              ),
-              body : Container(
-
-                  child:
-                  Column(
-                    children: [
-                      Visibility(
-                        visible: _dates.length > 0,
-                        child:   Container(
-                            width: double.infinity,
-                            color: Colors.white.withOpacity(0.03),
-                            alignment: Alignment.center,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                              child: Container(
-                                  child:Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: List.generate(_dates.length, (index) =>
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 5),
-                                            child: ButtonTheme(
-                                              height: 70.0,
-                                              minWidth: 10,
-                                              child: MaterialButton(
-                                                color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                                                shape: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(18),
-                                                    borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor)
-                                                ),
-                                                onPressed: (){
-                                                  setState(() {
-                                                    selectDate(_dates[index]);
-                                                  });
-                                                },
-                                                child: Column(
+                title: Text(widget.event?["name"]??""),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(_dates.length > 0? 80:0),
+                  child:    Visibility(
+                    visible: _dates.length > 0,
+                    child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.02),
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.white.withOpacity(0.05)),
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                          child: Container(
+                              child:Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: List.generate(_dates.length, (index) =>
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                        child: ButtonTheme(
+                                          height: 55.0,
+                                          minWidth: 10,
+                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          child: MaterialButton(
+                                            color: _dates[index] == _selected_date? Colors.white.withOpacity(0.8): Colors.white.withOpacity(0.15),
+                                            elevation: 0,
+                                            shape: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(18),
+                                                borderSide: BorderSide(width: 1, color: Colors.transparent)
+                                            ),
+                                            onPressed: (){
+                                              setState(() {
+                                                selectDate(_dates[index]);
+                                              });
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Row(
                                                   children: [
-                                                    Text("${DateFormat("d").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 20)),
-                                                    Text("${DateFormat("E").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 10)),
-                                                    Text("${DateFormat("MMM").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 12)),
+                                                    Text("${DateFormat("d").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(
+                                                        fontSize: 20,
+                                                      color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Colors.white
+                                                    )),
+                                                    Container(width: 5,),
+                                                    Text("${DateFormat("MMM").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 12,  color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Colors.white)),
                                                   ],
                                                 ),
-                                              ),
+                                                Text("${DateFormat("EEEE").format(DateTime.parse(_dates[index]?? ""))}", style: TextStyle(fontSize: 10,   color: _dates[index] == _selected_date? Theme.of(context).primaryColor: Colors.white)),
+                                              ],
                                             ),
-                                          )
-                                      )
-                                  )
-                              ),
-                            )
-                        ),
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child:  ListView(
-
-                              children: List.generate(_tickets.length, (index) =>
-                                  ListTile(
-                                      title: Text("${_tickets[index]["name"]} @ ₹${_tickets[index]["price"]}"),
-                                      subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
-                                      trailing: Container(
-                                        width: 120,
-                                        height: 30,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            IconButton(
-                                                color: Theme.of(context).primaryColor,
-                                                padding: EdgeInsets.all(0),
-                                                onPressed: (){
-                                                  changeQty(_tickets[index]["id"], -1);
-                                                },
-                                                icon: Icon(Icons.remove, size: 20,)
-                                            ),
-                                            Container(
-                                                width: 20,
-                                                child: Text((_quantities[_tickets[index]["id"]]??0).toString(), textAlign: TextAlign.center,)
-                                            ) ,
-                                            IconButton(
-                                                color: Theme.of(context).primaryColor,
-                                                padding: EdgeInsets.all(0),
-                                                onPressed: (){
-                                                  changeQty(_tickets[index]["id"], 1);
-                                                },
-                                                icon: Icon(Icons.add, size: 20,)
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       )
                                   )
                               )
+                          ),
+                        )
+                    ),
+                  ),
+                ),
+              ),
+              body : Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: ListView.separated(
+                            itemCount: _tickets?.length??0,
+                            itemBuilder: (BuildContext context, index){
+                              return ListTile(
+                                  title: Text("${_tickets[index]["name"]} @ ${NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 0).format(_tickets[index]["price"])}", style: TextStyle(fontSize: 15),),
+                                  subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
+                                  trailing: Container(
+                                    width: 90,
+                                    height: 25,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            changeQty(_tickets[index]["id"], -1);
+                                          },
+                                          child: GestureDetector(
+                                              onLongPressStart: (detail){
+                                                setState(() {
+                                                  _timer = Timer.periodic(const Duration(milliseconds: 100), (t) {
+                                                    changeQty(_tickets[index]["id"], -1);
+                                                  });
+                                                });
+                                              },
+                                              onLongPressEnd: (detail){
+                                                if (_timer != null) {
+                                                  _timer!.cancel();
+                                                }
+                                              },
+                                              child: Container(
+                                                  padding: EdgeInsets.all(2.5),
+                                                  decoration: BoxDecoration(
+                                                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                                                      borderRadius: BorderRadius.all(Radius.circular(8))
+                                                  ),
+                                                  child: Icon(Icons.remove, size: 20, color: Colors.white,)
+                                              )
+                                          ),
+                                        ),
+                                        Container(
+                                            width: 40,
+                                            child: Text((_quantities[_tickets[index]["id"]]??0).toString(), textAlign: TextAlign.center,)
+                                        ) ,
+                                        InkWell(
+                                          onTap: () {
+                                              changeQty(_tickets[index]["id"], 1);
+                                          },
+                                          child: GestureDetector(
+                                            onLongPressStart: (detail){
+                                              setState(() {
+                                                _timer = Timer.periodic(const Duration(milliseconds: 100), (t) {
+                                                  changeQty(_tickets[index]["id"], 1);
+                                                });
+                                              });
+                                            },
+                                            onLongPressEnd: (detail){
+                                              if (_timer != null) {
+                                                _timer!.cancel();
+                                              }
+                                            },
+                                            child: Container(
+                                                padding: EdgeInsets.all(2.5),
+                                                decoration: BoxDecoration(
+                                                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                                                    borderRadius: BorderRadius.all(Radius.circular(8))
+                                                ),
+                                                child: Icon(Icons.add, size: 20, color: Colors.white,)
+                                            )
+                                        ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, index){
+                              return Container(height: 1, color: Colors.white.withOpacity(0.03), margin: EdgeInsets.symmetric(horizontal: 15),);
+                            },
                           )
                       ),
                       Container(
                         width: double.infinity,
-                        color: Theme.of(context).primaryColor,
-                        child: InkWell(
-                            onTap: (){
-                              createCheckoutSession();
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                              child: Text("PAY (₹${_total.toString()})", textAlign: TextAlign.center,),
+                        color: Colors.white.withOpacity(0.03),
+                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child:  Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child:
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 2).format(_total), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                    Text("Total Price", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                  ],
+                                )
+                            ),
+                            ButtonTheme(
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    borderSide: BorderSide(
+                                        width: 0
+                                    )
+                                ),
+                                child: MaterialButton(
+
+                                  child: Text("BOOK NOW"),
+                                  color: Theme.of(context).primaryColor,
+                                  onPressed: (){
+                                    processBooking();
+                                  },
+                                )
                             )
+                          ],
                         ),
-                      ),
+                      )
 
                     ],
                   )

@@ -17,6 +17,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  bool _loading = true;
   checkCredentials() async{
     final prefs = await SharedPreferences.getInstance();
     Store<AppState> store = StoreProvider.of(context);
@@ -24,9 +25,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   fetchAppData() async{
+    setState(() {
+      _loading = true;
+    });
     var appData = await AppService.appData();
     Store<AppState> store = StoreProvider.of(context);
     store.dispatch(SaveLocationsAction(appData["locations"]));
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -43,37 +50,9 @@ class _MainScreenState extends State<MainScreen> {
         converter: (store) => store.state,
         builder: (context, state) {
           return Scaffold(
-              appBar: AppBar(
-                title: Container(
-                  child:Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                    Image.asset("assets/logo-large.png", height: 20, width: 120, fit: BoxFit.contain,),
-                  ]
-                    ,) ,
-                ),
-                actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    tooltip: '',
-                    onPressed: () {
-                      fetchAppData();
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.account_circle),
-                    tooltip: '',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                      );
-                    },
-                  ),
-                ],
-
-              ),
-              body:HomeScreen()
+              body:_loading ? Center(
+                child: CircularProgressIndicator(),
+              ):HomeScreen()
           );
         }
     );

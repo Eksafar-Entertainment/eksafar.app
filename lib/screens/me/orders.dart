@@ -51,59 +51,55 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   void showAlert(var order) {
-    showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            //height: 335 + double.parse((order["order_details"].length*80).toString()),
-            height: 700,
-            child: Column(
-              children: [
-                Text("Order Details", style: TextStyle(fontSize: 20),),
-                Container(
-                  height: 15,
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return Scaffold(
+        body: Container(
+          padding: EdgeInsets.only(top: 90),
+          child: Column(
+            children: [
+              QrImage(
+                data: order["id"].toString(),
+                version: QrVersions.auto,
+                size: 250,
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
+              ),
+              Text(order["event_name"]),
+              Text(
+                DateFormat.yMMMMEEEEd().format(DateTime.parse(order["event_datetime"])),
+                style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12
                 ),
-                QrImage(
-                  data: order["id"].toString(),
-                  version: QrVersions.auto,
-                  size: 200,
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.transparent,
-                ),
-                Text(order["event_name"]),
-                Text(
-                  DateFormat.yMMMMEEEEd().format(DateTime.parse(order["event_datetime"])),
-                  style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12
-                  ),
-                ),
-                Container(
-                  height: 15,
-                ),
-                Container(
-                    height: 350,
-                    child: ListView.separated(
-                      itemCount: order["order_details"].length,
-                      itemBuilder: (context, _index){
-                        return ListTile(
-                          title: Text(order["order_details"][_index]["name"]),
-                          subtitle: Text(DateFormat.yMMMMEEEEd().format(DateTime.parse(order["order_details"][_index]["start_datetime"])), style: TextStyle(color: Colors.grey, fontSize: 12),),
-                          trailing: Text("x${order["order_details"][_index]["quantity"].toString()}", style: TextStyle(color: Theme.of(context).primaryColor),),
-                        );
-                      },
-                      separatorBuilder: (context,index){
-                        return Container(height: 1, color: Colors.white.withOpacity(0.3), margin: EdgeInsets.symmetric(horizontal: 15),);
-                      },
-                    )
-                )
-              ],
+              ),
+              Container(
+                height: 15,
+              ),
+              Expanded(
+                flex: 1,
+                child:Container(
+                  child: ListView.separated(
+                    itemCount: order["order_details"].length,
+                    itemBuilder: (context, _index){
+                      return ListTile(
+                        title: Text(order["order_details"][_index]["name"]),
+                        subtitle: Text(DateFormat.yMMMMEEEEd().format(DateTime.parse(order["order_details"][_index]["start_datetime"])), style: TextStyle(color: Colors.grey, fontSize: 12),),
+                        trailing: Text("x${order["order_details"][_index]["quantity"].toString()}", style: TextStyle(color: Theme.of(context).primaryColor),),
+                      );
+                    },
+                    separatorBuilder: (context,index){
+                      return Container(height: 1, color: Colors.white.withOpacity(0.3), margin: EdgeInsets.symmetric(horizontal: 15),);
+                    },
+                  )
+              )
+              )
+            ],
 
-            ),
           ),
-        )
-    );
+        ),
+      );
+    }));
+
   }
 
 

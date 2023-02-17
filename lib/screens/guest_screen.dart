@@ -1,5 +1,4 @@
 import 'package:eksafar/models/app_state.dart';
-import 'package:eksafar/screens/login_screen.dart';
 import 'package:eksafar/screens/otp_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -42,7 +41,6 @@ class _GuestScreenState extends State<GuestScreen> {
                     }, child: Text("Login now"))
                   ],
                 )
-
               )
           );
         }

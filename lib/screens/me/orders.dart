@@ -83,20 +83,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   height: 15,
                 ),
                 Container(
-                  height: 350,
-                  child: ListView.separated(
-                        itemCount: order["order_details"].length,
-                        itemBuilder: (context, _index){
-                          return ListTile(
-                            title: Text(order["order_details"][_index]["name"]),
-                            subtitle: Text(DateFormat.yMMMMEEEEd().format(DateTime.parse(order["order_details"][_index]["start_datetime"])), style: TextStyle(color: Colors.grey, fontSize: 12),),
-                            trailing: Text("x${order["order_details"][_index]["quantity"].toString()}", style: TextStyle(color: Theme.of(context).primaryColor),),
-                          );
-                        },
-                        separatorBuilder: (context,index){
-                          return Container(height: 1, color: Colors.white.withOpacity(0.3), margin: EdgeInsets.symmetric(horizontal: 15),);
-                        },
-                      )
+                    height: 350,
+                    child: ListView.separated(
+                      itemCount: order["order_details"].length,
+                      itemBuilder: (context, _index){
+                        return ListTile(
+                          title: Text(order["order_details"][_index]["name"]),
+                          subtitle: Text(DateFormat.yMMMMEEEEd().format(DateTime.parse(order["order_details"][_index]["start_datetime"])), style: TextStyle(color: Colors.grey, fontSize: 12),),
+                          trailing: Text("x${order["order_details"][_index]["quantity"].toString()}", style: TextStyle(color: Theme.of(context).primaryColor),),
+                        );
+                      },
+                      separatorBuilder: (context,index){
+                        return Container(height: 1, color: Colors.white.withOpacity(0.3), margin: EdgeInsets.symmetric(horizontal: 15),);
+                      },
+                    )
                 )
               ],
 

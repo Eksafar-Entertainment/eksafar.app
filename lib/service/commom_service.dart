@@ -40,10 +40,8 @@ class CommonService{
         return body;
       } else if(response.statusCode == 403){
         appStore.dispatch(LogoutAction());
-        print(body["message"]);
         throw Exception(body["message"]);
       } else {
-        print(body["message"]);
         throw Exception(body["message"]);
       }
     } catch(err){

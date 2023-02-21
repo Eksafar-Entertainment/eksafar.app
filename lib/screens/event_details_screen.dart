@@ -33,8 +33,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       _venue = response["venue"];
       _artists = response["artists"];
       _loading = false;
-
-      print(_event);
     });
   }
   @override
@@ -73,7 +71,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             forceElevated: true,
                             flexibleSpace: LayoutBuilder(
                                 builder: (BuildContext context, BoxConstraints constraints) {
-                                  // print('constraints=' + constraints.toString());
                                   top = constraints.biggest.height;
                                   return FlexibleSpaceBar(
                                       centerTitle: false,
@@ -262,51 +259,55 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
 
                     //for available tickets only
-                    (_event["has_tickets"]) && (!_event["is_past"]) ?
-                    Container(
-                      width: double.infinity,
-                      child: ThemeButton(
-                        height: 48,
-                        borderRadius: 0,
-                        onPressed: (){
-                          if(state.accessToken == null){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => OtpLoginScreen()),
-                            );
-                          } else{
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => EventBookingScreen(event: _event)),
-                            );
-                          }
-                        },
-                        label: "BOOK NOW",
-                      )
-                    ) : Container(),
-
-                    (_event["is_coming_soon"]) ?
-                    Container(
-                      width: double.infinity,
-                      color: Theme.of(context).primaryColor,
-                      child: InkWell(
-                          onTap: (){
-                            if(state.accessToken == null){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => OtpLoginScreen()),
-                              );
-                            } else{
-
-                            }
-                          },
-                          child: Container(
+                    Visibility(
+                        visible:  (_event["has_tickets"]) && (!_event["is_past"]),
+                        child: SizedBox(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                            child: Text("NOTIFY ME", textAlign: TextAlign.center,),
-                          )
-                      ),
-                    ) : Container()
+                            child: ThemeButton(
+                              height: 48,
+                              borderRadius: 0,
+                              onPressed: (){
+                                if(state.accessToken == null){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => OtpLoginScreen()),
+                                  );
+                                } else{
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => EventBookingScreen(event: _event)),
+                                  );
+                                }
+                              },
+                              label: "BOOK NOW",
+                            )
+                        )
+                    ),
+
+                    Visibility(
+                        visible:_event["is_coming_soon"] ,
+                        child: Container(
+                          width: double.infinity,
+                          color: Theme.of(context).primaryColor,
+                          child: InkWell(
+                              onTap: (){
+                                if(state.accessToken == null){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => OtpLoginScreen()),
+                                  );
+                                } else{
+
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                                child: Text("NOTIFY ME", textAlign: TextAlign.center,),
+                              )
+                          ),
+                        )
+                    )
                   ]
               )
           );

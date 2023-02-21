@@ -43,7 +43,7 @@ class ThemeButton extends MaterialButton{
         color: _color,
         elevation: 0,
         shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? (height??30)/3),
+            borderRadius: BorderRadius.circular(borderRadius ?? (height??30)/4),
           borderSide: BorderSide(width: 0, color: Colors.transparent),
         ),
         onPressed: onPressed,
@@ -52,8 +52,13 @@ class ThemeButton extends MaterialButton{
           width: ((height??30)/3),
           child: CircularProgressIndicator(color: _labelColor,),
         ): Text(
-          label,
-          style: TextStyle(fontSize: ((height??30)/3), color: _labelColor),
+          label.toUpperCase(),
+          style: TextStyle(
+              fontSize: ((height??30)/3.5),
+              color: _labelColor,
+              letterSpacing: 1.8,
+              fontWeight: FontWeight.w500
+          ),
         ),
       ),
     );

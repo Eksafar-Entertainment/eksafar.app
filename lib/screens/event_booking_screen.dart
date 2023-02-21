@@ -26,6 +26,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
 
   var _quantities = {};
   int _total = 0;
+  int _total_quantity=0;
 
 
   bool _loading = true;
@@ -67,14 +68,17 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
 
   calculateForm(){
     int overall = 0;
+    int totalQuantity = 0;
     for(int index=0; index < _tickets.length; index++){
       var ticket = _tickets[index];
       int price = ticket["price"] ?? 0;
       int quantity = _quantities[ticket["id"]] ?? 0;
       overall += (price * quantity);
+      totalQuantity+=quantity;
     }
     setState(() {
       _total = overall;
+      _total_quantity = totalQuantity;
     });
   }
 
@@ -93,7 +97,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
       }
     }
 
-    if(items.isEmpty){
+    if(items.isEmpty || _total_quantity <= 0){
       return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Please select ticket"),
       ));
@@ -112,7 +116,6 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
           _is_processing = false;
         });
       } else {
-        print(response);
         var options = {
           'key': response["key"],
           'amount': response["order_details"]["amount"],
@@ -158,13 +161,13 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
         context: context,
         builder: (context) => Dialog(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             height: 150,
             child: Column(
               children: [
                 Icon(success?Icons.check : Icons.error, color: success?Colors.green:Colors.red, size: 50,),
                 Container(height: 15,),
-                Text(message, style: TextStyle(), textAlign: TextAlign.center,),
+                Text(message, style: const TextStyle(), textAlign: TextAlign.center,),
               ],
             ),
           ),
@@ -228,24 +231,24 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                         alignment: Alignment.center,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                           child: Container(
                               child:Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: List.generate(_dates.length, (index) =>
                                       Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 5),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
                                         child: ButtonTheme(
                                           height: 55.0,
                                           minWidth: 10,
-                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          padding: const EdgeInsets.symmetric(horizontal: 20),
                                           child: MaterialButton(
                                             color: _dates[index] == _selected_date? Colors.white.withOpacity(0.8): Colors.white.withOpacity(0.15),
                                             elevation: 0,
                                             shape: OutlineInputBorder(
                                                 borderRadius: BorderRadius.circular(18),
-                                                borderSide: BorderSide(width: 1, color: Colors.transparent)
+                                                borderSide: const BorderSide(width: 1, color: Colors.transparent)
                                             ),
                                             onPressed: (){
                                               setState(() {
@@ -287,8 +290,8 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                             itemCount: _tickets?.length??0,
                             itemBuilder: (BuildContext context, index){
                               return ListTile(
-                                  title: Text("${_tickets[index]["name"]} @ ${NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 0).format(_tickets[index]["price"])}", style: TextStyle(fontSize: 15),),
-                                  subtitle: Text(_tickets[index]["description"], style: TextStyle(fontSize: 11, color: Colors.grey),),
+                                  title: Text("${_tickets[index]["name"]} @ ${NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 0).format(_tickets[index]["price"])}", style: const TextStyle(fontSize: 15),),
+                                  subtitle: Text(_tickets[index]["description"], style: const TextStyle(fontSize: 11, color: Colors.grey),),
                                   trailing: Container(
                                     width: 90,
                                     height: 25,
@@ -303,6 +306,9 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                           child: GestureDetector(
                                               onLongPressStart: (detail){
                                                 setState(() {
+                                                  if (_timer != null) {
+                                                    _timer!.cancel();
+                                                  }
                                                   _timer = Timer.periodic(const Duration(milliseconds: 100), (t) {
                                                     changeQty(_tickets[index]["id"], -1);
                                                   });
@@ -314,12 +320,12 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                                 }
                                               },
                                               child: Container(
-                                                  padding: EdgeInsets.all(2.5),
+                                                  padding: const EdgeInsets.all(2.5),
                                                   decoration: BoxDecoration(
                                                       color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                                      borderRadius: BorderRadius.all(Radius.circular(8))
+                                                      borderRadius: const BorderRadius.all(Radius.circular(8))
                                                   ),
-                                                  child: Icon(Icons.remove, size: 20, color: Colors.white,)
+                                                  child: const Icon(Icons.remove, size: 20, color: Colors.white,)
                                               )
                                           ),
                                         ),
@@ -346,12 +352,12 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                               }
                                             },
                                             child: Container(
-                                                padding: EdgeInsets.all(2.5),
+                                                padding: const EdgeInsets.all(2.5),
                                                 decoration: BoxDecoration(
                                                     color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                                    borderRadius: BorderRadius.all(Radius.circular(8))
+                                                    borderRadius: const BorderRadius.all(Radius.circular(8))
                                                 ),
-                                                child: Icon(Icons.add, size: 20, color: Colors.white,)
+                                                child: const Icon(Icons.add, size: 20, color: Colors.white,)
                                             )
                                         ),
                                         )
@@ -362,46 +368,56 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                               );
                             },
                             separatorBuilder: (BuildContext context, index){
-                              return Container(height: 1, color: Colors.white.withOpacity(0.03), margin: EdgeInsets.symmetric(horizontal: 15),);
+                              return Container(height: 1, color: Colors.white.withOpacity(0.03), margin: const EdgeInsets.symmetric(horizontal: 15),);
                             },
                           )
                       ),
-                      Container(
-                        width: double.infinity,
-                        color: Colors.white.withOpacity(0.03),
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child:  Row(
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child:
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 2).format(_total), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-                                    Text("Total Price", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                                  ],
-                                )
+                      Visibility(
+                          visible: _total_quantity > 0,
+                          child: Container(
+                            width: double.infinity,
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.03),
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16),
+                              )
                             ),
-                            ButtonTheme(
-                                shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                                    borderSide: BorderSide(
-                                        width: 0
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                            child:  Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child:
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(NumberFormat.currency(locale: "en_IN", symbol: "₹", decimalDigits: 2).format(_total), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                                        const Text("Total Price", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                                      ],
                                     )
                                 ),
-                                child: ThemeButton(
-                                  height: 35,
-                                  label: "BOOK NOW",
-                                  color: Theme.of(context).primaryColor,
-                                  onPressed: (){
-                                    processBooking();
-                                  },
-                                  isLoading: _is_processing
+                                ButtonTheme(
+                                    shape: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                                        borderSide: BorderSide(
+                                            width: 0
+                                        )
+                                    ),
+                                    child: ThemeButton(
+                                        height: 40,
+                                        label: "BOOK NOW",
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: (){
+                                          processBooking();
+                                        },
+                                        isLoading: _is_processing
+                                    )
                                 )
-                            )
-                          ],
-                        ),
+                              ],
+                            ),
+                          )
                       )
 
                     ],

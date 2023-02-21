@@ -10,7 +10,6 @@ class AppService{
       querParams["location"] = _loc_id.toString();
     }
     Uri uri = CommonService.generateUri("/main-page", queryParams: querParams);
-    print(uri);
     var response = await http.get(uri,
         headers: await CommonService.generateHeader()
     );

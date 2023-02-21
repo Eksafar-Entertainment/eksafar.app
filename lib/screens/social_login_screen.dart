@@ -16,7 +16,6 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> {
   WebViewController? _controller;
   @override
   void initState() {
-    print(CommonService.generateUri("/auth/login/${widget.platform}").toString());
     super.initState();
   }
 
@@ -47,7 +46,6 @@ class _SocialLoginScreenState extends State<SocialLoginScreen> {
                 JavascriptChannel(
                     name: 'flutterChannel',
                     onMessageReceived: (JavascriptMessage message) {
-                      print(message.toString());
                       saveToken(message.message);
                     }
                 )

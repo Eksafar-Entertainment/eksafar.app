@@ -131,7 +131,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                               ),
 
                               Container(
-                                  width: 100,
+                                  width: 140,
                                   margin: const EdgeInsets.only(bottom: 15, top: 25),
                                   child:ThemeButton(
                                       height: 40,

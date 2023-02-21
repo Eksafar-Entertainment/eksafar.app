@@ -41,9 +41,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     _controller.addListener(() {
       if (_controller.position.atEdge) {
         bool isTop = _controller.position.pixels == 0;
-        if (isTop) {
-          print('At the top');
-        } else {
+        if (!isTop) {
           fetchOrders();
         }
       }

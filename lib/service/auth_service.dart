@@ -28,8 +28,6 @@ class AuthService{
     var response = await http.get(uri,
         headers: await CommonService.generateSecureHeader()
     );
-
-    print(response.body);
     if(response.statusCode == 200) {
       var body = json.decode(response.body);
       final prefs = await SharedPreferences.getInstance();

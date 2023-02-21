@@ -3,6 +3,7 @@ import 'package:eksafar/redux/actions.dart';
 import 'package:eksafar/screens/app.dart';
 import 'package:eksafar/screens/social_login_screen.dart';
 import 'package:eksafar/service/auth_service.dart';
+import 'package:eksafar/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -73,8 +74,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
         builder: (context, state) {
           return Scaffold(
               appBar: AppBar(
-                title: const Text(""),
-                centerTitle: true,
+                title: const Text("Login"),
               ),
               body: SingleChildScrollView(
                   child: Container(
@@ -85,16 +85,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 20),
-                                child: const Text("Login", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 60),
-                                child: const Text("Use you credential and login to your account",  textAlign: TextAlign.center,),
-                              ),
+
                               Container(
                                 width: double.infinity,
                                 margin: const EdgeInsets.only(bottom: 35),
@@ -117,40 +108,38 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                               ),
 
 
-                              _otp_id!=null ?Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 25),
-                                child: TextFormField(
-                                  controller: _otpController,
-                                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    return value!.length < 6 ? "Please enter password": null;
-                                  },
-                                  decoration: InputDecoration(
-                                    //contentPadding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15),
-                                    //border: OutlineInputBorder(),
-                                    hintText: 'Enter otp',
-                                    labelText: "OTP",
-                                  ),
-
-
-
-                                ),
-                              ): Container(),
+                              Visibility(
+                                  visible: _otp_id!=null,
+                                  child: Container(
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(bottom: 25),
+                                    child: TextFormField(
+                                      controller: _otpController,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) {
+                                        return value!.length < 6 ? "Please enter password": null;
+                                      },
+                                      decoration: InputDecoration(
+                                        //contentPadding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15),
+                                        //border: OutlineInputBorder(),
+                                        hintText: 'Enter otp',
+                                        labelText: "OTP",
+                                      ),
+                                    ),
+                                  )
+                              ),
 
                               Container(
-                                  width: 200,
+                                  width: 100,
                                   margin: const EdgeInsets.only(bottom: 15, top: 25),
-                                  child:SizedBox(
-                                    width: double.infinity, // <-- match_parent
-                                    height: 45, // <-- match-parent
-                                    child: ElevatedButton(
-                                      onPressed: !_is_loading ?() {
+                                  child:ThemeButton(
+                                      height: 40,
+                                      onPressed: () {
                                         _otp_id==null ? sendOtp(): verifyOtp();
-                                      } : null,
-                                      child: _is_loading ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator()): Text(_otp_id!=null ? "Verify Otp":"Send OTP"),
-                                    ),
+                                      },
+                                      label:_otp_id!=null ? "Verify Otp":"Continue",
+                                      isLoading: _is_loading
                                   )
                               )
                             ],

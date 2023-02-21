@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:eksafar/models/app_state.dart';
 import 'package:eksafar/service/event_service.dart';
+import 'package:eksafar/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import "package:intl/intl.dart";
@@ -20,6 +21,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
   var _dates = null;
   var _selected_date = null;
   var _timer;
+  bool _is_processing = false;
 
 
   var _quantities = {};
@@ -94,16 +96,21 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
     if(items.isEmpty){
       return ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Please select ticket"),
-        backgroundColor: Colors.red,
       ));
     }
 
     data["items"] = items;
     try {
+      setState(() {
+        _is_processing = true;
+      });
       var response = await EventService.createCheckoutSession(data);
       if(response["is_free"]){
         Navigator.pop(context);
         showAlert("Congratulation booking successful", true);
+        setState(() {
+          _is_processing = false;
+        });
       } else {
         print(response);
         var options = {
@@ -125,6 +132,9 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
       }
     }catch(err){
       showAlert(err.toString(), false);
+      setState(() {
+        _is_processing = false;
+      });
     }
     setState(() {
       _quantities = {};
@@ -163,17 +173,26 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    setState(() {
+      _is_processing = false;
+    });
     Navigator.pop(context);
     // Do something when payment succeeds
     showAlert("Congratulation booking successful", true);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
+    setState(() {
+      _is_processing = false;
+    });
     // Do something when payment fails
     showAlert(response.message.toString() + response.code.toString(), false);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
+    setState(() {
+      _is_processing = false;
+    });
     // Do something when an external wallet was selected
     showAlert(response.walletName.toString(), true);
   }
@@ -280,6 +299,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                           onTap: () {
                                             changeQty(_tickets[index]["id"], -1);
                                           },
+                                          borderRadius: BorderRadius.circular(8),
                                           child: GestureDetector(
                                               onLongPressStart: (detail){
                                                 setState(() {
@@ -296,7 +316,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                               child: Container(
                                                   padding: EdgeInsets.all(2.5),
                                                   decoration: BoxDecoration(
-                                                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                                                      color: Theme.of(context).primaryColor.withOpacity(0.5),
                                                       borderRadius: BorderRadius.all(Radius.circular(8))
                                                   ),
                                                   child: Icon(Icons.remove, size: 20, color: Colors.white,)
@@ -311,6 +331,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                           onTap: () {
                                               changeQty(_tickets[index]["id"], 1);
                                           },
+                                          borderRadius: BorderRadius.circular(8),
                                           child: GestureDetector(
                                             onLongPressStart: (detail){
                                               setState(() {
@@ -327,7 +348,7 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                             child: Container(
                                                 padding: EdgeInsets.all(2.5),
                                                 decoration: BoxDecoration(
-                                                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                                                    color: Theme.of(context).primaryColor.withOpacity(0.5),
                                                     borderRadius: BorderRadius.all(Radius.circular(8))
                                                 ),
                                                 child: Icon(Icons.add, size: 20, color: Colors.white,)
@@ -369,13 +390,14 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
                                         width: 0
                                     )
                                 ),
-                                child: MaterialButton(
-
-                                  child: Text("BOOK NOW"),
+                                child: ThemeButton(
+                                  height: 35,
+                                  label: "BOOK NOW",
                                   color: Theme.of(context).primaryColor,
                                   onPressed: (){
                                     processBooking();
                                   },
+                                  isLoading: _is_processing
                                 )
                             )
                           ],

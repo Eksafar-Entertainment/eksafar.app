@@ -3,6 +3,7 @@ import 'package:eksafar/screens/event_booking_screen.dart';
 import 'package:eksafar/screens/otp_login_screen.dart';
 import 'package:eksafar/service/commom_service.dart';
 import 'package:eksafar/service/event_service.dart';
+import 'package:eksafar/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -264,27 +265,24 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     (_event["has_tickets"]) && (!_event["is_past"]) ?
                     Container(
                       width: double.infinity,
-                      color: Theme.of(context).primaryColor,
-                      child: InkWell(
-                          onTap: (){
-                            if(state.accessToken == null){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => OtpLoginScreen()),
-                              );
-                            } else{
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => EventBookingScreen(event: _event)),
-                              );
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                            child: Text("BOOK NOW", textAlign: TextAlign.center,),
-                          )
-                      ),
+                      child: ThemeButton(
+                        height: 48,
+                        borderRadius: 0,
+                        onPressed: (){
+                          if(state.accessToken == null){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OtpLoginScreen()),
+                            );
+                          } else{
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => EventBookingScreen(event: _event)),
+                            );
+                          }
+                        },
+                        label: "BOOK NOW",
+                      )
                     ) : Container(),
 
                     (_event["is_coming_soon"]) ?

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:eksafar/models/app_state.dart';
+import 'package:eksafar/screens/me/orders.dart';
 import 'package:eksafar/service/event_service.dart';
 import 'package:eksafar/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -162,12 +163,29 @@ class _EventBookingScreenState extends State<EventBookingScreen> {
         builder: (context) => Dialog(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            height: 150,
+            height: 200,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(success?Icons.check : Icons.error, color: success?Colors.green:Colors.red, size: 50,),
                 Container(height: 15,),
                 Text(message, style: const TextStyle(), textAlign: TextAlign.center,),
+                Container(height: 15,),
+                Visibility(
+                    visible: success,
+                    child: ThemeButton(
+                      height: 35,
+                      label: "View Tickets",
+                      onPressed: (){
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const OrdersScreen()),
+                        );
+                      },
+                    )
+                )
               ],
             ),
           ),
